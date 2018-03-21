@@ -4,6 +4,7 @@ import os
 import pygame as pg
 import keyboard
 import numpy
+from PIL import Image
 
 keybinding = {
     'action':pg.K_s,
@@ -131,7 +132,15 @@ class Control(object):
                 else:
                     self.key_configurations[97] = 0
 
-                pg.image.save(self.screen, "frames/frame_"+str(frame_id)+".png")
+                #Frame Preprocessing Starts
+                str_image = pg.image.tostring(self.screen, "RGBA",False)
+                image = Image.frombytes("RGBA",(self.screen.get_width(),self.screen.get_height()),str_image).convert('LA')
+
+                downsampled_image = image.resize((267,200), Image.ANTIALIAS)
+
+                downsampled_image.save("frames/frame_"+str(frame_id)+".png")
+
+                #Frame Preprocessing Ends
 
                 self.keys = self.key_configurations
 
